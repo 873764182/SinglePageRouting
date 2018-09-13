@@ -11,5 +11,9 @@
     </p>
 </div>
 <script type="text/javascript">
-    console.log("第二个页面")
+    console.log("第二个页面");
+
+    window.pm.addPageLifeCycleCallback(function (pageId, lifeCycle) {
+        console.log("第二个页面回调", pageId + " -> " + lifeCycle);
+    })
 </script>
