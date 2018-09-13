@@ -3,7 +3,7 @@
 
 ### 参考了微信的WEUI实现
 
-### 使用请直接引入lib下的 pages-manage.css 与 pages-manage.js (注意: 需要依赖JQuery库)
+### 使用请直接引入test目录下的 pages-manage.css 与 pages-manage.js (注意: 需要依赖JQuery库)
 
 ### 示例DEMO请参考test.html
 
