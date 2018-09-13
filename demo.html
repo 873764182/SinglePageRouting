@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>页面切换</title>
+    <!-- 导入所需资源，注意资源的路径 -->
+    <link rel="stylesheet" href="lib/weui.css"/>
+    <link rel="stylesheet" href="lib/example.css"/>
+    <script src="lib/zepto.min.js"></script>
+    <script src="lib/example.js"></script>
+
+    <script type="text/javascript">
+        // <!-- 这段js代码具体操作界面切换的功能 -->
+        // $(function () {
+        //     var winH = $(window).height();
+        //     var categorySpace = 10;
+        //
+        //     $('.js_item').on('click', function () {
+        //         var id = $(this).data('id');
+        //         window.pageManager.go(id);
+        //     });
+        //     $('.js_category').on('click', function () {
+        //         var $this = $(this),
+        //             $inner = $this.next('.js_categoryInner'),
+        //             $page = $this.parents('.page'),
+        //             $parent = $(this).parent('li');
+        //         var innerH = $inner.data('height');
+        //         bear = $page;
+        //
+        //         if (!innerH) {
+        //             $inner.css('height', 'auto');
+        //             innerH = $inner.height();
+        //             $inner.removeAttr('style');
+        //             $inner.data('height', innerH);
+        //         }
+        //
+        //         if ($parent.hasClass('js_show')) {
+        //             $parent.removeClass('js_show');
+        //         } else {
+        //             $parent.siblings().removeClass('js_show');
+        //
+        //             $parent.addClass('js_show');
+        //             if (this.offsetTop + this.offsetHeight + innerH > $page.scrollTop() + winH) {
+        //                 var scrollTop = this.offsetTop + this.offsetHeight + innerH - winH + categorySpace;
+        //
+        //                 if (scrollTop > this.offsetTop) {
+        //                     scrollTop = this.offsetTop - categorySpace;
+        //                 }
+        //
+        //                 $page.scrollTop(scrollTop);
+        //             }
+        //         }
+        //     });
+        // });
+    </script>
+
+    <!-- js中创建div界面，也就是成功提示界面，注意js的id -->
+    <script type="text/html" id="tpl_msg_success">
+        <div class="page">
+            <div class="weui-msg">
+                <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+                <div class="weui-msg__text-area">
+                    <h2 class="weui-msg__title">操作成功</h2>
+                    <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:void(0);">文字链接</a></p>
+                </div>
+                <div class="weui-msg__opr-area">
+                    <p class="weui-btn-area">
+                        <a href="javascript:history.back();" class="weui-btn weui-btn_primary">推荐操作</a>
+                        <a href="javascript:history.back();" class="weui-btn weui-btn_default">辅助操作</a>
+                    </p>
+                </div>
+                <div class="weui-msg__extra-area">
+                    <div class="weui-footer">
+                        <p class="weui-footer__links">
+                            <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
+                        </p>
+                        <p class="weui-footer__text">Copyright &copy; 2008-2016 weui.io</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!-- js中创建div界面，也就是警告提示界面，注意js的id -->
+    <script type="text/html" id="tpl_msg_warn">
+        <div class="page">
+            <div class="weui-msg">
+                <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+                <div class="weui-msg__text-area">
+                    <h2 class="weui-msg__title">操作失败</h2>
+                    <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:void(0);">文字链接</a></p>
+                </div>
+                <div class="weui-msg__opr-area">
+                    <p class="weui-btn-area">
+                        <a href="javascript:history.back();" class="weui-btn weui-btn_primary">推荐操作</a>
+                        <a href="javascript:history.back();" class="weui-btn weui-btn_default">辅助操作</a>
+                    </p>
+                </div>
+                <div class="weui-msg__extra-area">
+                    <div class="weui-footer">
+                        <p class="weui-footer__links">
+                            <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
+                        </p>
+                        <p class="weui-footer__text">Copyright &copy; 2008-2016 weui.io</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+</head>
+<body ontouchstart>
+<!-- 这段代码必须有，类似于界面切换的容器 -->
+<div class="container" id="container"></div>
+
+<!-- js中创建div界面，也就是主界面，注意js的id -->
+<script type="text/html" id="tpl_home">
+    <div class="page">
+        <div class="page__hd">
+            <h1 class="page__title">Msg</h1>
+            <p class="page__desc">提示页</p>
+        </div>
+        <div class="page__bd page__bd_spacing">
+            <!-- 这里要注意a的链接msg_success与成功提示界面的id相符 -->
+            <a href="#msg_success" class="weui-btn weui-btn_default">成功提示页</a>
+            <!-- 这里要注意a的链接msg_warn与警告提示界面的id相符 -->
+            <a href="#msg_warn" class="weui-btn weui-btn_default">失败提示页</a>
+        </div>
+    </div>
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>免费视频课程</title>
+    <script src="../lib/zepto.min.js"></script>
+    <script src="../lib/fingerprint.js"></script>
+    <script src="../lib/public.utils.js"></script>
+    <script type="text/javascript">
+        window.onload = function (dom) {
+            <!-- 因为是动态加载子页面,一定样注意引入顺序 -->
+            setTimeout(function () {
+                downLoadCss("../lib/weui.css", document.body);
+                downLoadCss("../lib/example.css", document.body);
+                downLoadJs("../lib/weui.js", document.body);
+                downLoadJs("../lib/example.js", document.body);
+
+                $("#loadingToast").remove();    // 删除加载框
+            }, 500);
+        };
+    </script>
+</head>
+
+<body ontouchstart>
+
+<div id="loadingToast">
+    <!-- 必须引入一次CSS文件 -->
+    <link rel="stylesheet" href="../lib/weui.css">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">数据加载中</p>
+    </div>
+</div>
+
+<div class="container" id="container">
+    <!-- 页面会被从这里注入 -->
+</div>
+
+<script type="text/javascript" id="tpl_home">
+    loadPage('home', '#tpl_home');
+</script>
+
+<script type="text/javascript" id="tpl_video_info">
+    loadPage('video_info', '#tpl_video_info');
+</script>
+
+</body>
+
+</html>

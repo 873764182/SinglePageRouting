@@ -1,0 +1,129 @@
+<style type="text/css">
+    h1, h2, h3 {
+        font-size: 18px;
+        color: #FF8902;
+        line-height: 24px;
+        /*white-space: nowrap;*/
+        /*text-overflow: ellipsis;*/
+        /*word-break: break-all;*/
+        /*overflow: hidden;*/
+    }
+</style>
+
+<div class="page">
+    <div class="weui-flex" id="video_file">
+        <div class="weui-flex__item">
+            <video src="#" controls="controls" preload="auto" id="play_video_view" width="100%" height="300"
+                   style="object-fit:fill; background-color: #0C0C0C;">
+                您的浏览器不支持 html5 video 标签。
+            </video>
+        </div>
+    </div>
+    <div class="weui-flex" style="margin-left: 8px; margin-right: 8px;">
+        <div class="weui-flex__item">
+            <h3 id="video_title">title大厦大厦大啥多啥大所多啥大所萨达萨达所多啥大所多萨达</h3>
+        </div>
+        <div style="text-align: center;">
+            <img src="../img/video_watch.png" style="width: 24px; height: 24px; float: left;"/>
+            <div style="font-size: 12px; color: #C9C9C9; float: right; padding-top: 4px; margin-left: 4px;">
+                <span id="video_watch">123</span>
+            </div>
+        </div>
+    </div>
+    <div class="weui-flex" style="margin: 8px; color: #999999; font-size: 12px;">
+        主讲:&nbsp;<span id="video_author">大叔</span>
+    </div>
+    <div class="weui-flex" style="margin: 8px; color: #999999; font-size: 12px;">
+        时长:&nbsp;<span id="video_duration">124553</span>
+    </div>
+
+    <article class="weui-article">
+        <h1>课程介绍</h1>
+        <section>
+            <!--<h2 class="title">课程介绍</h2>-->
+            <section>
+                <h3 style="color: #666666">乐享推荐</h3>
+                <p id="video_lxtj">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat.
+                </p>
+            </section>
+            <section>
+                <h3 style="color: #666666">内容简介</h3>
+                <p id="video_nrjj">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </section>
+            <section>
+                <h3 style="color: #666666">作者简介</h3>
+                <p id="video_zzjj">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </section>
+            <section>
+                <h3 style="color: #666666">视频信息</h3>
+                <p id="video_spxx">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </section>
+        </section>
+    </article>
+
+</div>
+<script type="text/javascript">
+
+    let param = pageParam("video_info");
+
+    ajax(API().C_CVI, {
+        "_id": param.id
+    }, function (result) {
+        if (result.code === 0) {
+            let videoInfo = result.data[0];
+            let pvv = $("#play_video_view");
+            pvv.attr("src", videoInfo.videoSouUrl);
+
+            initVideoInfo(videoInfo);
+
+            initVideoSize(pvv);
+
+            setTimeout(function () {
+                document.getElementById("play_video_view").play();
+            }, 500);
+        }
+    });
+
+    // 固定 16 : 9 的宽高比
+    function initVideoSize(pvv) {
+        let windowWidth = window.screen.width;
+        let videoHeight = windowWidth * (9 / 16);
+        pvv.attr("width", windowWidth);
+        pvv.attr("height", videoHeight);
+
+        let piv = $("#play_div_view");
+        piv.attr("width", windowWidth);
+        piv.attr("height", videoHeight);
+    }
+
+    function initVideoInfo(videoInfo) {
+        $("#video_title").html(videoInfo.title);
+        $("#video_watch").html(videoInfo.watchCount);
+        $("#video_author").html(videoInfo.authorName);
+        $("#video_duration").html((videoInfo.duration / 1000) + "s");
+        $("#video_lxtj").html(videoInfo.recText);
+        $("#video_nrjj").html(videoInfo.courseInfo);
+        $("#video_zzjj").html(videoInfo.authorInfo);
+        $("#video_spxx").html(videoInfo.videoInfo);
+    }
+
+</script>

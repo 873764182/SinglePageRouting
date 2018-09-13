@@ -1,0 +1,163 @@
+<div class="page">
+    <style type="text/css">
+        #video_list_view {
+            position: fixed; /*一定要加这个,不然滚动事件无效*/
+            height: auto;
+            top: 0;
+            bottom: 0;
+            width: auto;
+            left: 0;
+            right: 0;
+            overflow: auto;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            display: block;
+            border-radius: 4px;
+        }
+    </style>
+
+    <div class="weui-cells" id="video_list_view" style="overflow: scroll; margin: 0; padding: 0;">
+        <!-- 列表内容从这里注入 -->
+    </div>
+
+    <script type="text/javascript">
+
+        var template =
+            "<div class='weui-cell weui-cell_access' onclick='itemClick(\"@_id\")'>" +
+            "    <div class='weui-cell__hd' style='position: relative;margin-right: 10px;'>" +
+            "        <img src='@frontImg'>" +
+            "    </div>" +
+            "    <div class='weui-cell__bd'>" +
+            "        <p style='font-size: 16px;color: #0D0D0D;'>@title</p>" +
+            "        <p style='font-size: 10px;color: #888888;'>@simText</p>" +
+            "    </div>" +
+            "    <div class='weui-cell__ft'></div>" +
+            "</div>";
+
+        var template_2 =    // weui-cell 会带有分隔线效果
+            "<div class='weui-cell_access' onclick='itemClick(\"@_id\")'" +
+            "     style='position: relative; width: 95%; height: 260px; margin: 0 auto; padding: 0; top: 16px'>" +
+            "    <div style='position: absolute; z-inden: 1; width: 100%; height: 95%;'>" +
+            "        <img src='@video_img' style='width: 100%; height: 100%; border-radius: 4px 4px 4px 4px;'>" +
+            "    </div>" +
+            "    <div style='position: absolute; z-inden: 2; width: 100%; height: 95%; background-color: #0C0C0C; opacity: 0.15; border-radius: 4px 4px 4px 4px;'>" +
+            "    </div>" +
+            "    <div style='position: absolute; z-inden: 3; width: 100%; height: 95%; border-radius: 4px 4px 4px 4px;'>" +
+            "        <img src='../img/video_play.png' style='width: 60px; height: 60px; margin: 0 auto; position: relative; top: 80px;'>" +
+            "    </div>" +
+            "    <div style='position: absolute; z-inden: 4; width: 100%; height: 95%; background-color: #0C0C0C; opacity: 0.1; border-radius: 4px 4px 4px 4px;'>" +
+            "        <div style='position: absolute; bottom: 0; width: 100%; height: 42px; background-color: #EFEFEF;'>" +
+            "        </div>" +
+            "    </div>" +
+            "    <div style='position: absolute; z-inden: 5; width: 100%; height: 95%; border-radius: 4px 4px 4px 4px; box-shadow: 5px 5px 5px #aaaaaa;'>" +
+            "        <div style='margin: 8px; width: 100%; height: auto;'>" +
+            "            <strong style='font-size: 18px; color: #eeeeee;'>@title</strong>" +
+            "        </div>" +
+            "        <div style='position: absolute; bottom: 0; width: 100%; height: auto;'>" +
+            "            <p style='color: #eeeeee; font-size: 14px; margin: 8px;'>" +
+            "                @video_sim" +
+            "            </p>" +
+            "            <div class='weui-flex' style='height: 0; color: #eeeeee; font-size: 14px; border-radius: 0px 0px 4px 4px;'>" +
+            "                <div class='weui-flex__item' style='text-align: center'>" +
+            "                    主讲:<span>@video_author</span>" +
+            "                </div>" +
+            "                <div class='weui-flex__item' style='text-align: center'>" +
+            "                    时长:<span>@video_duration</span>" +
+            "                </div>" +
+            "                <div class='weui-flex__item' style='text-align: center'>" +
+            "                    播放:<span>@video_watch</span>" +
+            "                </div>" +
+            "            </div>" +
+            "        </div>" +
+            "    </div>" +
+            "</div>";
+
+        var loadMore = true;    // 是否开启加载更多
+        var currentLoading = false; // 当前是否正在加载
+        var currentPage = 1;    // 当前的页数
+        var pageLimit = 10;    // 每页多少条
+
+        getListData();  // 加载数据
+
+        $("#video_list_view").scroll(function (dom) {
+            let vlv = $(this);
+            let height = vlv.height();  // 控件可见高度
+            let scrollTop = vlv[0].scrollTop;   // 内容滚动到的位置(头部)
+            let scrollHeight = vlv[0].scrollHeight; // 可滚动区域的总高度
+
+            if (loadMore === true && (height + scrollTop) >= scrollHeight) { // 滚动到了底部
+                if (currentLoading === false) {
+                    currentLoading = true;
+                    vlv.append($(createLoadView()));    // 显示提示
+
+                    currentPage = currentPage + 1;
+                    getListData(currentPage);
+                }
+            }
+        });
+
+        function getListData(page) {
+            ajax(API().C_CLVBA, {
+                "page": page ? page : 1,
+                "limit": 10,
+                "belColumn": "mfty"
+            }, function (result) {
+                if (result.code === 0) {
+                    let vlv = $("#video_list_view");
+                    if (currentPage === 1) {
+                        vlv.empty();    // 起一页时可以清空
+                    } else {
+                        // 不是第一页有加载框 隐藏加载提示
+                        let childrenDiv = vlv.children("div");
+                        if (childrenDiv.length > 0) {
+                            childrenDiv[childrenDiv.length - 1].remove();
+                        }
+                    }
+                    currentLoading = false; // 加载完成
+
+                    let videoList = result.data;
+                    if (videoList.length < pageLimit) {
+                        loadMore = false;
+                    }
+                    videoList.forEach(function (value) {
+                        // let videoItem = template
+                        //     .replace("@_id", value._id)
+                        //     .replace("@frontImg", value.frontImg)
+                        //     .replace("@title", value.title)
+                        //     .replace("@simText", value.simText);
+                        // vlv.append($(videoItem));
+
+                        let videoItem = template_2
+                            .replace("@_id", value._id)
+                            .replace("@video_img", value.frontImg)
+                            .replace("@title", value.title)
+                            .replace("@video_sim", value.simText)
+                            .replace("@video_author", value.authorName)
+                            .replace("@video_duration", (value.duration / 1000) + "s")
+                            .replace("@video_watch", value.watchCount);
+                        vlv.append($(videoItem));
+                    });
+                }
+            });
+        }
+
+        function itemClick(id) {
+            pageParam("video_info", {"id": id});
+            window.location = "#video_info";
+        }
+
+        // 创建一个加载视图
+        function createLoadView() {
+            let view =
+                "<div style='margin-top: 0; margin-bottom: 24px; padding: 0; width: 100%; height: 24px; text-align: center;'>" +
+                "   <i class='weui-loading weui-icon_toast''></i>" +
+                "</div>";
+            return view;
+        }
+    </script>
+
+
+</div>

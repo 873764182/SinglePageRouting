@@ -1,0 +1,66 @@
+.page-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.animate-ready {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 200%;
+    opacity: 0.0;
+    background-color: #EEEEEE;
+}
+
+.page-style {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #EEEEEE;
+    opacity: 1.0;
+}
+
+.page-in {
+    position: absolute;
+    animation: mymove-in 0.6s;
+    -webkit-animation: mymove-in 0.6s;
+}
+
+@keyframes mymove-in {
+    from {
+        left: 100%;
+        opacity: 0.1;
+    }
+    to {
+        left: 0;
+        opacity: 1.0;
+    }
+}
+
+.page-out {
+    position: absolute;
+    animation: mymove-out 0.6s;
+    -webkit-animation: mymove-out 0.6s;
+}
+
+@keyframes mymove-out {
+    from {
+        left: 0;
+        opacity: 1.0;
+    }
+    to {
+        left: 100%;
+        opacity: 0.1;
+    }
+}
