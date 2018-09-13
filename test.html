@@ -49,11 +49,11 @@
 <script type="text/javascript" src="test/pm.js"></script>
 
 <script type="text/javascript">
-    setTimeout(function () {
+    $(function () {
         window.pm.addPageLifeCycleCallback(function (pageId, lifeCycle) {
             console.log("回调", pageId + " -> " + lifeCycle);
         })
-    }, 0);
+    });
 </script>
 
 </body>
