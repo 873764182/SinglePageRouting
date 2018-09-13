@@ -26,6 +26,18 @@ $(function () {
             self.appendPage(hash, pageHtml);
         },
 
+        // 打开指定页面 #index
+        go: function (id) {
+            self.openHashPage(id);
+        },
+
+        // 后退一页
+        back: function () {
+            var hash = self.getHash();
+            var pageHtml = self.findPageHtml(hash);
+            self.appendPage(hash, pageHtml);
+        },
+
         // 获取路径上的hash(#部分)
         getHash: function () {
             return window.location.hash.indexOf('#') >= 0 ? window.location.hash : self.def_page_index_id;
@@ -95,14 +107,12 @@ $(function () {
 
         // 添加页面到容器
         appendPage: function (id, html) {
-            var pc = self.pageContainer; // 页面容器
-
-            var activityPage = self.findActivityPage(id, pc);
-            var activityPageLast = self.findActivityPageLast(pc);
+            var activityPage = self.findActivityPage(id, self.pageContainer);
+            var activityPageLast = self.findActivityPageLast(self.pageContainer);
             if (activityPage != null && activityPage !== undefined &&  // 计划打开的页面在历史里面存在 且与倒数第二个一致 认定用户为后退操作
                 activityPageLast != null && $(activityPageLast).attr("id") === $(activityPage).attr("id")) {
 
-                var currentPage = $(self.findActivityPage(self.currentHash, pc)); // 找到当前页面
+                var currentPage = $(self.findActivityPage(self.currentHash, self.pageContainer)); // 找到当前页面
                 currentPage.addClass('animate-ready').addClass('page-out');
                 currentPage.on('animationend webkitAnimationEnd', function () {
                     currentPage.remove(); // 动画结束后 从容器删除
@@ -115,17 +125,16 @@ $(function () {
             } else if (activityPage != null && activityPage !== undefined &&    // 计划打开的页面在历史里面存在 但是不是倒数第二个 弹出(关闭)指定页面之后的所有页面
                 (activityPageLast == null || $(activityPageLast).attr("id") !== $(activityPage).attr("id"))) {
 
-                self.popUpLastActivityPage(id, pc);  // 弹出(关闭)指定页面之后的所有页面
+                self.popUpLastActivityPage(id, self.pageContainer);  // 弹出(关闭)指定页面之后的所有页面
 
             } else {    // 历史中不存在 打开新页面
-
                 var animateContainerNew = self.createAnimateContainer(id);
                 animateContainerNew.append($(html));
                 animateContainerNew.addClass('page-in');
                 animateContainerNew.on('animationend webkitAnimationEnd', function () { // 动画结束后删除不必要的属性
                     animateContainerNew.removeClass('page-in').removeClass('animate-ready').addClass('page-style');
                 });
-                pc.append(animateContainerNew);
+                self.pageContainer.append(animateContainerNew);
 
                 // 生命周期回调
                 self.pageLifeCycleDistribute(self.currentHash, self.PAGE_STOP);
