@@ -213,6 +213,7 @@ $(function () {
             }
         }
     };
+
     // 初始化
     window.pm.init();
 });

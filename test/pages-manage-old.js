@@ -196,11 +196,9 @@ $(function () {
     setTimeout(function () {
         pageContainer.empty();
         pageContainer.addClass('page-container');
-
         addPageLifeCycleCallback(function (id, lc) {
             console.log("生命周期回调", id + " | " + lc);
         });
-
         var hash = getHash();
         if (hash === def_page_index_id) {
             openDefPage(pageContainer);
